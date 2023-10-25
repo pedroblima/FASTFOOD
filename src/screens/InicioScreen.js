@@ -17,6 +17,8 @@ const InicioScreen = () => {
          keyExtractor={item => item.title}
          horizontal
          showsHorizontalScrollIndicator={false}
+         pagingEnabled
+         overScrollMode="never"
          renderItem={({item}) => <InicioCard {...item} />}
          />
        </View>
