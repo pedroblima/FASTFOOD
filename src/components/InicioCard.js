@@ -8,7 +8,7 @@ import {Fonts, Colors, Images} from '../constants';
 const InicioCard = ({title, content, image}) => {
   return (
     <View style={styles.container}>
-        <Image style={styles.image} source={Image[image]} resizeMode="contain"/>
+        <Image style={styles.image} source={Images[image]} resizeMode="contain"/>
         <Text style={styles.titleText}>{title}</Text>
       <Text style={styles.contentText}>{content}</Text>
     </View>
@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
   },
   image: {
     height: Display.setHeight(30),
-    width: Display.setWidth(60),
+    width: Display.setWidth(90),
   },
   titleText: {
     fontSize: 22,

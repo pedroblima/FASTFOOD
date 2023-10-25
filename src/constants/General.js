@@ -1,21 +1,21 @@
 const INICIO_CONTENTS = [
     {
         image: 'DISCOVER',
-        title: 'Discover places near you',
+        title: 'Descubra lugares perto de você',
         content:
-            'We make it simple to find your favorite food. Enter your address and let us do the rest.',
+            'Tornamos mais simples encontrar sua comida favorita. Digite seu endereço e deixe-nos fazer o resto.',
     },
     {
         image: 'FAVORITE',
-        title: 'Order your favorite',
+        title: 'Encomende a sua comida favorita',
         content:
-            'We will store your favorite foods based on your search and orders.',
+            'Armazenaremos seus alimentos favoritos com base em sua pesquisa e pedidos..',
     },
     {
         image: 'DELIVER',
-        title: 'Fastest Delivery',
+        title: 'Entrega mais rápida do mercado',
         content:
-            'We make food ordering fast, easy and free. No matter you paid online or cash.',
+            'Tornamos os pedidos de comida rápidos, fáceis e gratuitos. Não importa se você pagou com Cartão, Pix ou em Dinheiro.',
     },
 ]; 
 export default { INICIO_CONTENTS };

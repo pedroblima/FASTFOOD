@@ -1,9 +1,15 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { StyleSheet, Text, View, StatusBar, Image } from 'react-native';
 import { Colors, Images } from '../constants';
 import { Display } from '../utils';
 
-const SplashScreen = () => {
+const SplashScreen = ({ navigation }) => {
+    useEffect(() => {
+        setTimeout(() => {
+            navigation.navigate('Inicio');
+        }, 1500);
+    }, []);
+
     return (
         <View style={styles.container}>
             <StatusBar
@@ -15,12 +21,9 @@ const SplashScreen = () => {
                 resizeMode='contain'
                 style={styles.Image}
             />
-            <Text></Text>
         </View>
     )
 }
-
-
 
 const styles = StyleSheet.create({
     container: {
@@ -29,7 +32,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: Colors.DEFAULT_RED,
     },
-    Image:{
+    Image: {
         height: Display.setHeight(30),
         width: Display.setWidth(30),
     },

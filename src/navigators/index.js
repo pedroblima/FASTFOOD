@@ -9,8 +9,8 @@ const Navigators = () => {
     return (
         <NavigationContainer>
             <Stack.Navigator screenOptions={{ headerShown: false }}>
-                <Stack.Screen name="Inicio" component={InicioScreen} />
                 <Stack.Screen name="Splash" component={SplashScreen} />
+                <Stack.Screen name="Inicio" component={InicioScreen} />
 
 
             </Stack.Navigator>
