@@ -4,6 +4,7 @@ import { Colors, Fonts, General } from '../constants';
 import { InicioCard } from '../components';
 import Display from '../utils/Display';
 import Separador from '../components/Separador';
+import { useNavigation } from '@react-navigation/native'; // Importe o hook de navegação
 
 const pageStyle = isActive =>
   isActive
@@ -37,6 +38,9 @@ const InicioScreen = () => {
     });
   };
 
+  // Obtenha o objeto de navegação
+  const navigation = useNavigation();
+
   return (
     <View style={styles.container}>
       <StatusBar
@@ -64,7 +68,8 @@ const InicioScreen = () => {
       <Pagination index={InicioListIndex} />
       <Separador height={Display.setHeight(8)} />
       {InicioListIndex === 2 ? (
-        <TouchableOpacity style={styles.gettingStartedButton}>
+        <TouchableOpacity style={styles.gettingStartedButton}
+         onPress={() => navigation.navigate('Login')}>
           <Text style={styles.gettingStartedButtonText}>Vamos começar</Text>
         </TouchableOpacity>
       ) : (
@@ -86,6 +91,7 @@ const InicioScreen = () => {
     </View>
   );
 };
+
 
 const styles = StyleSheet.create({
   container: {
@@ -115,7 +121,7 @@ const styles = StyleSheet.create({
   buttonText: {
     color: 'black',
     fontSize: 16,
-    fontFamily: Fonts.POPPINS_BOLD,
+  
     lineHeight: 16 * 1.4,
   },
   button: {
@@ -135,7 +141,7 @@ const styles = StyleSheet.create({
   gettingStartedButtonText: {
     color: 'white',
     fontSize: 16,
-    fontFamily: Fonts.POPPINS_BOLD,
+
     lineHeight: 16 * 1.4,
   },
 });

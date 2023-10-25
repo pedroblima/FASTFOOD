@@ -28,13 +28,13 @@ const styles = StyleSheet.create({
   },
   titleText: {
     fontSize: 22,
-    fontFamily: Fonts.POPPINS_BLACK,
+    fontFamily: Fonts.POPPINS_BOLD
   },
   contentText: {
     fontSize: 18,
-    fontFamily: Fonts.POPPINS_BLACK,
     textAlign: 'center',
     marginHorizontal: 20,
+    fontFamily: Fonts.POPPINS_BOLD
   },
 });
 
