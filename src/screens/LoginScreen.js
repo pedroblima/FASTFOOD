@@ -63,17 +63,18 @@ const LoginScreen = ({ navigation }) => {
                         name="eye"
                         size={22}
                         color={Colors.DEFAULT_GREY}
-                        style={{ marginRight: 10 }} />
+                        style={{ marginRight: 10 }}
+                    />
                 </View>
             </View>
-            <Text></Text>
             <View style={styles.forgotPasswordContainer}>
-                <View >
+                <TouchableOpacity>
                     <Text style={styles.rememberMeText}>Lembrar</Text>
-                </View>
+                </TouchableOpacity>
+                <TouchableOpacity>
+                    <Text style={styles.forgotPasswordText}>Esqueceu sua senha</Text>
+                </TouchableOpacity>
             </View>
-            <Text style={styles.forgotPasswordText}>Esqueceu sua senha</Text>
-            <View />
             <TouchableOpacity>
                 <Text>Entrar</Text>
             </TouchableOpacity>
@@ -144,6 +145,7 @@ const styles = StyleSheet.create({
     inputSubContainer: {
         flexDirection: 'row',
         alignItems: 'center',
+        justifyContent: 'space-between',
     },
     inputText: {
         fontSize: 18,
@@ -158,10 +160,12 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
+        
     },
     rememberMeText: {
+        marginTop: 20,
         marginLeft: 10,
-        fontSize: 12,
+        fontSize: 16,
         lineHeight: 12 * 1.4,
         color: Colors.DEFAULT_GREY,
     },
