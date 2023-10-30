@@ -8,7 +8,7 @@ import { Separador } from '../components';
 
 
 
-const ForgotPasswordScreen = ({navigation}) => {
+const EsqueceuSenhaScreens = ({navigation}) => {
   
   return (
     <View style={styles.container}>
@@ -23,11 +23,11 @@ const ForgotPasswordScreen = ({navigation}) => {
                     size={30}
                     onPress={() => navigation.goBack()}
                 />
-        <Text style={styles.headerTitle}>Forgot Password</Text>
+        <Text style={styles.headerTitle}>Esqueceu sua Senha</Text>
       </View>
-      <Text style={styles.title}>Forgot Password</Text>
+      <Text style={styles.title}>Esqueceu sua Senha</Text>
       <Text style={styles.content}>
-        Enter your email, so that we can help you to recover your password.
+      Digite seu e-mail, para que possamos ajudá-lo a recuperar sua senha.
       </Text>
       <View style={styles.inputContainer}>
         <View style={styles.inputSubContainer}>
@@ -46,7 +46,7 @@ const ForgotPasswordScreen = ({navigation}) => {
         </View>
       </View>
       <TouchableOpacity style={styles.signinButton}>
-        <Text style={styles.signinButtonText}>Reset Password</Text>
+        <Text style={styles.signinButtonText}>Redefinir Senha</Text>
       </TouchableOpacity>
     </View>
   );
@@ -119,4 +119,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ForgotPasswordScreen;
+export default EsqueceuSenhaScreens;

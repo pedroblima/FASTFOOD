@@ -87,7 +87,7 @@ const InscrevaseScreen = ({navigation}) => {
                     />
                 </View>
             </View>
-            <TouchableOpacity style={styles.LoginButton}>
+            <TouchableOpacity style={styles.LoginButton}  onPress={() => navigation.navigate('RegistraTelefone')}>
                 <Text style={styles.LoginButtonText}>Criar Conta</Text>
             </TouchableOpacity>
            
