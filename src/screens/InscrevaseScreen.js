@@ -1,14 +1,13 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, View, StatusBar, TextInput, TouchableOpacity, Image } from 'react-native';
-import Separador from '../components/Separador';
-import Ionicons from "react-native-vector-icons/Ionicons";
-import Feather from "react-native-vector-icons/Feather";
+import React, {useState} from 'react'
+import { StyleSheet, Text, View, StatusBar, TextInput, TouchableOpacity, Image} from 'react-native'
 import { Colors, Images } from '../constants';
+import Ionicons from "react-native-vector-icons/Ionicons";
+import Separador from '../components/Separador';
 import { Display } from '../utils';
-import { ToggleButton } from '../components';
+import Feather from "react-native-vector-icons/Feather";
 
 
-const LoginScreen = ({ navigation }) => {
+const InscrevaseScreen = ({navigation}) => {
     const [isPasswordShow, setIsPasswordShow] = useState(false);
     return (
         <View style={styles.container}>
@@ -24,9 +23,9 @@ const LoginScreen = ({ navigation }) => {
                     onPress={() => navigation.goBack()}
                 />
 
-                <Text style={styles.headerTitle}>Entrar</Text>
+                <Text style={styles.headerTitle}>Inscrever-se</Text>
             </View>
-            <Text style={styles.title}>Bem Vindo</Text>
+            <Text style={styles.title}>Crie sua Conta</Text>
             <Text style={styles.content}>
                 Digite seu nome de usuário e senha e aproveite para pedir sua comida
             </Text>
@@ -39,6 +38,23 @@ const LoginScreen = ({ navigation }) => {
                     />
                     <TextInput
                         placeholder="Nome de usuário"
+                        placeholderTextColor={Colors.DEFAULT_GREY}
+                        selectionColor={Colors.DEFAULT_GREY}
+                        style={styles.inputText}
+                    />
+                    <View />
+                </View>
+            </View>
+            <Separador height={15} />
+            <View style={styles.inputContainer}>
+                <View style={styles.inputSubContainer}>
+                    <Feather name="mail"
+                        size={22}
+                        color={Colors.DEFAULT_GREY}
+                        style={{ marginRight: 10 }}
+                    />
+                    <TextInput
+                        placeholder="E-mail"
                         placeholderTextColor={Colors.DEFAULT_GREY}
                         selectionColor={Colors.DEFAULT_GREY}
                         style={styles.inputText}
@@ -71,26 +87,10 @@ const LoginScreen = ({ navigation }) => {
                     />
                 </View>
             </View>
-            <Text></Text>
-            <View style={styles.ForgotPasswordContainer}>
-                <View style={styles.ToggleContainer}>
-                    <ToggleButton size={0.5} />
-                    <Text style={styles.rememberMeText}>Lembrar</Text>
-                </View>
-                <View>
-                    <Text style={styles.ForgotPasswordText} onPress={() => navigation.navigate('ForgotPassword')}>Esqueceu sua senha</Text>
-                </View>
-            </View>
             <TouchableOpacity style={styles.LoginButton}>
-                <Text style={styles.LoginButtonText}>Entrar</Text>
+                <Text style={styles.LoginButtonText}>Criar Conta</Text>
             </TouchableOpacity>
-            <View style={styles.InscrevaseContainer}>
-                <Text style={styles.accountText}>Voce não possui uma conta? </Text>
-                <Text style={styles.InscrevaseText}
-                    onPress={() => navigation.navigate('Inscrevase')}>
-                    Inscrever-se
-                </Text>
-            </View>
+           
             <Text style={styles.orText}>OU</Text>
             <TouchableOpacity style={styles.facebookButton}>
                 <View style={styles.socialButtonsContainer}>
@@ -109,14 +109,18 @@ const LoginScreen = ({ navigation }) => {
                 </View>
 
             </TouchableOpacity>
+      
         </View>
-    )
-}
+        
+        
+    );
+};
+
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: Colors.DEFAULT_WHITE
+        backgroundColor: Colors.DEFAULT_WHITE,
     },
     headerContainer: {
         flexDirection: "row",
@@ -165,25 +169,6 @@ const styles = StyleSheet.create({
         color: Colors.DEFAULT_BLACK,
         flex: 1,
     },
-    ForgotPasswordContainer: {
-        marginHorizontal: 20,
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-
-    },
-    rememberMeText: {
-        marginTop: 1,
-        marginLeft: 10,
-        fontSize: 14,
-        lineHeight: 12 * 1.4,
-        color: Colors.DEFAULT_GREY,
-    },
-    ForgotPasswordText: {
-        fontSize: 12,
-        lineHeight: 12 * 1.4,
-        color: Colors.DEFAULT_RED,
-    },
     LoginButton: {
         backgroundColor: Colors.DEFAULT_RED,
         borderRadius: 8,
@@ -198,30 +183,13 @@ const styles = StyleSheet.create({
         lineHeight: 18 * 1.4,
         color: Colors.DEFAULT_WHITE,
     },
-    InscrevaseContainer: {
-        marginHorizontal: 20,
-        justifyContent: 'center',
-        paddingVertical: 20,
-        flexDirection: 'row',
-        alignItems: 'center',
-    },
-    accountText: {
-        fontSize: 13,
-        lineHeight: 13 * 1.4,
-        color: Colors.DEFAULT_BLACK,
-    },
-    InscrevaseText: {
-        fontSize: 13,
-        lineHeight: 13 * 1.4,
-        color: Colors.DEFAULT_RED,
-        marginLeft: 2,
-    },
     orText: {
         fontSize: 13,
         lineHeight: 15 * 1.4,
         color: Colors.DEFAULT_BLACK,
         marginLeft: 2,
         alignSelf: 'center',
+        marginTop: 20,
     },
     facebookButton: {
         backgroundColor: Colors.FABEBOOK_BLUE,
@@ -263,10 +231,8 @@ const styles = StyleSheet.create({
         fontSize: 13,
         lineHeight: 13 * 1.4,
     },
-    ToggleContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-    },
 });
 
-export default LoginScreen;
+
+export default InscrevaseScreen;
+
