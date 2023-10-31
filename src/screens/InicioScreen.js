@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { StyleSheet, Text, View, StatusBar, FlatList, TouchableOpacity } from 'react-native';
-import { Colors, Fonts, General } from '../constants';
+import { Colors, General } from '../constants';
 import { InicioCard } from '../components';
 import Display from '../utils/Display';
 import Separador from '../components/Separador';

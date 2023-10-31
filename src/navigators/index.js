@@ -8,6 +8,7 @@ import {
     InscrevaseScreen,
     EsqueceuSenhaScreens,
     RegistraTelefoneScreen,
+    VerificationScreen,
 
 
 } from "../screens";
@@ -24,6 +25,7 @@ const Navigators = () => {
                 <Stack.Screen name="Inscrevase" component={InscrevaseScreen} />
                 <Stack.Screen name="EsqueceuSenha" component={EsqueceuSenhaScreens} />
                 <Stack.Screen name="RegistraTelefone" component={RegistraTelefoneScreen} />
+                <Stack.Screen name="Verification" component={VerificationScreen} />
 
 
 

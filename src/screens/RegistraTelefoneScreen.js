@@ -17,22 +17,23 @@ const RegistraTelefoneScreen = ({ navigation }) => {
   const [inputsContainerY, setInputsContainerY] = useState(0);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [dropdownLayout, setDropdownLayout] = useState({})
+  const [phoneNumber, setPhoneNumber] = useState("")
 
   const closeDropdown = (pageX, pageY) => {
-    if (isDropdownOpen){
-      if(pageX < dropdownLayout?.x || 
-        pageX > dropdownLayout?.x + dropdownLayout?.width || 
+    if (isDropdownOpen) {
+      if (pageX < dropdownLayout?.x ||
+        pageX > dropdownLayout?.x + dropdownLayout?.width ||
         pageY < dropdownLayout?.y ||
-      pageY >  dropdownLayout?.y + dropdownLayout?.height){
+        pageY > dropdownLayout?.y + dropdownLayout?.height) {
         setIsDropdownOpen(false);
       }
     }
   }
   return (
-    <View style={styles.container} 
-    onStartShouldSetResponder={({nativeEvent: {pageX, pageY }}) => 
-    closeDropdown(pageX, pageY)
-    }>
+    <View style={styles.container}
+      onStartShouldSetResponder={({ nativeEvent: { pageX, pageY } }) =>
+        closeDropdown(pageX, pageY)
+      }>
       <StatusBar barStyle="dark-content" backgroundColor={Colors.DEFAULT_RED} translucent />
       <Separador height={StatusBar.currentHeight} />
       <View style={styles.headerContainer}>
@@ -69,33 +70,37 @@ const RegistraTelefoneScreen = ({ navigation }) => {
             keyboardType="phone-pad"
             onFocus={() => setIsDropdownOpen(false)}
             style={styles.inputText}
+            onChangeText={(text) => setPhoneNumber(selectedCountry?.dial_code + text)
+            }
           />
         </View>
       </View>
-      <TouchableOpacity style={styles.LoginButton} activeOpacity={0.8}>
-                <Text style={styles.LoginButtonText}>Criar Conta</Text>
-            </TouchableOpacity>
+      <TouchableOpacity style={styles.LoginButton} 
+      activeOpacity={0.8}
+        onPress={() => navigation.navigate("Verification", {phoneNumber})}>
+        <Text style={styles.LoginButtonText}>Continue</Text>
+      </TouchableOpacity>
       {isDropdownOpen && (
-        <View 
-        style={getDropdownStyle(inputsContainerY)} 
-        onLayout={({
-          nativeEvent: {
-            layout: {x, y, height, width},
-          },
-        }) => setDropdownLayout({x, y, height, width})}>
-          <FlatList 
-          data={CountryCode}
-          keyExtractor={item=> item.code} 
-          renderItem={({item}) => <FlagItem {...item} onPress={(country) => {
-            setSelectedCountry(country)
-            setIsDropdownOpen(false)
-          }}
+        <View
+          style={getDropdownStyle(inputsContainerY)}
+          onLayout={({
+            nativeEvent: {
+              layout: { x, y, height, width },
+            },
+          }) => setDropdownLayout({ x, y, height, width })}>
+          <FlatList
+            data={CountryCode}
+            keyExtractor={item => item.code}
+            renderItem={({ item }) => <FlagItem {...item} onPress={(country) => {
+              setSelectedCountry(country)
+              setIsDropdownOpen(false)
+            }}
+            />
+            }
           />
-        }
-          />
-          
+
         </View>
-        
+
       )}
     </View>
   );
@@ -191,13 +196,13 @@ const styles = StyleSheet.create({
     height: Display.setHeight(6),
     justifyContent: 'center',
     alignItems: 'center',
-},
-LoginButtonText: {
+  },
+  LoginButtonText: {
     fontSize: 16,
     lineHeight: 18 * 1.4,
     color: Colors.DEFAULT_WHITE,
-},
-  
+  },
+
 });
 
 export default RegistraTelefoneScreen;
