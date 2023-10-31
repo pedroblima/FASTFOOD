@@ -4,8 +4,8 @@ import { Colors } from '../constants';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Separador from '../components/Separador';
 import { Display } from '../utils';
-import { useNavigation } from '@react-navigation/native';
 import { useState } from 'react';
+import { useNavigation } from '@react-navigation/native'; // Importe useNavigation
 
 const VerificationScreen = ({
   route: {
@@ -16,7 +16,10 @@ const VerificationScreen = ({
   const secondInput = useRef();
   const thirdInput = useRef();
   const fourthInput = useRef();
+  
   const [otp, setOtp] = useState({ 1: '', 2: '', 3: '', 4: '' });
+
+  const navigation = useNavigation(); // Inicialize a navegação
 
   return (
     <View style={styles.container}>
@@ -31,7 +34,7 @@ const VerificationScreen = ({
         <Ionicons
           name="chevron-back-outline"
           size={30}
-          onPress={() => navigation.goBack()}
+          onPress={() => navigation.goBack()} // Use a navegação para voltar
         />
         <Text style={styles.headerTitle}>Verificação do Número</Text>
       </View>
@@ -94,7 +97,9 @@ const VerificationScreen = ({
       </View>
       <TouchableOpacity
         style={styles.signinButton}
-        onPress={() => console.log(otp)}>
+        onPress={() => {
+          navigation.navigate('Home');
+        }}>
         <Text style={styles.signinButtonText}>Verify</Text>
       </TouchableOpacity>
     </View>

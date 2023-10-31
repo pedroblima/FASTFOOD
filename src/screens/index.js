@@ -5,6 +5,7 @@ import InscrevaseScreen from "./InscrevaseScreen";
 import EsqueceuSenhaScreens from "./EsqueceuSenhaScreens";
 import RegistraTelefoneScreen from "./RegistraTelefoneScreen";
 import VerificationScreen from "./VerificationScreen";
+import HomeScreen from "./HomeScreen";
 
 export {
     SplashScreen,
@@ -14,6 +15,7 @@ export {
     EsqueceuSenhaScreens,
     RegistraTelefoneScreen,
     VerificationScreen,
+    HomeScreen,
 
     
 };

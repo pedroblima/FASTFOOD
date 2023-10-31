@@ -84,7 +84,7 @@ const InicioScreen = () => {
             style={styles.button}
             activeOpacity={0.8}
             onPress={pageScroll}>
-            <Text style={styles.buttonText}>PRÓXIMO</Text>
+            <Text style={styles.buttonText2}>PRÓXIMO</Text>
           </TouchableOpacity>
         </View>
       )}
@@ -144,6 +144,12 @@ const styles = StyleSheet.create({
 
     lineHeight: 16 * 1.4,
   },
+  buttonText2: {
+    color: 'white',
+    fontSize: 16,
+  
+    lineHeight: 16 * 1.4,
+  }
 });
 
 export default InicioScreen;
