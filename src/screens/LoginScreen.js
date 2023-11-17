@@ -1,47 +1,67 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, StatusBar, TextInput, TouchableOpacity, Image } from 'react-native';
 import Separador from '../components/Separador';
 import Ionicons from "react-native-vector-icons/Ionicons";
 import Feather from "react-native-vector-icons/Feather";
 import { Colors, Images } from '../constants';
-import { Display } from '../utils';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ToggleButton } from '../components';
-
 
 const LoginScreen = ({ navigation }) => {
     const [isPasswordShow, setIsPasswordShow] = useState(false);
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+
+    useEffect(() => {
+        // Clear input fields when the component mounts
+        setUsername('');
+        setPassword('');
+    }, []);
+
+    const handleLogin = async () => {
+        try {
+            // Retrieve user data from AsyncStorage
+            const storedUserData = await AsyncStorage.getItem('userData');
+            if (storedUserData) {
+                const userData = JSON.parse(storedUserData);
+
+                // Check if the entered username and password match the stored user data
+                if (userData.username === username && userData.password === password) {
+                    // If match, navigate to the home screen
+                    navigation.navigate('Home');
+                } else {
+                    // If not match, navigate to the registration screen
+                    navigation.navigate('Inscrevase');
+                }
+            } else {
+                // If no user data found, navigate to the registration screen
+                navigation.navigate('Inscrevase');
+            }
+        } catch (error) {
+            console.log('Error retrieving user data:', error);
+        }
+    };
+
     return (
         <View style={styles.container}>
-            <StatusBar barStyle="dark-content"
-                backgroundColor={Colors.DEFAULT_RED}
-                translucent />
-
+            <StatusBar barStyle="dark-content" backgroundColor={Colors.DEFAULT_RED} translucent />
             <Separador height={StatusBar.currentHeight} />
             <View style={styles.headerContainer}>
-                <Ionicons
-                    name="chevron-back-outline"
-                    size={30}
-                    onPress={() => navigation.goBack()}
-                />
-
+                <Ionicons name="chevron-back-outline" size={30} onPress={() => navigation.goBack()} />
                 <Text style={styles.headerTitle}>Entrar</Text>
             </View>
             <Text style={styles.title}>Bem Vindo</Text>
-            <Text style={styles.content}>
-                Digite seu nome de usuário e senha e aproveite para pedir sua comida
-            </Text>
+            <Text style={styles.content}>Digite seu nome de usuário e senha e aproveite para pedir sua comida</Text>
             <View style={styles.inputContainer}>
                 <View style={styles.inputSubContainer}>
-                    <Feather name="user"
-                        size={22}
-                        color={Colors.DEFAULT_GREY}
-                        style={{ marginRight: 10 }}
-                    />
+                    <Feather name="user" size={22} color={Colors.DEFAULT_GREY} style={{ marginRight: 10 }} />
                     <TextInput
                         placeholder="Nome de usuário"
                         placeholderTextColor={Colors.DEFAULT_GREY}
                         selectionColor={Colors.DEFAULT_GREY}
                         style={styles.inputText}
+                        value={username}
+                        onChangeText={(text) => setUsername(text)}
                     />
                     <View />
                 </View>
@@ -49,18 +69,15 @@ const LoginScreen = ({ navigation }) => {
             <Separador height={15} />
             <View style={styles.inputContainer}>
                 <View style={styles.inputSubContainer}>
-                    <Feather
-                        name="lock"
-                        size={22}
-                        color={Colors.DEFAULT_GREY}
-                        style={{ marginRight: 10 }}
-                    />
+                    <Feather name="lock" size={22} color={Colors.DEFAULT_GREY} style={{ marginRight: 10 }} />
                     <TextInput
                         secureTextEntry={isPasswordShow ? false : true}
                         placeholder="Senha"
                         placeholderTextColor={Colors.DEFAULT_GREY}
                         selectionColor={Colors.DEFAULT_GREY}
                         style={styles.inputText}
+                        value={password}
+                        onChangeText={(text) => setPassword(text)}
                     />
                     <Feather
                         name={isPasswordShow ? "eye" : "eye-off"}
@@ -78,20 +95,17 @@ const LoginScreen = ({ navigation }) => {
                     <Text style={styles.rememberMeText}>Lembrar</Text>
                 </View>
                 <View>
-                    <Text style={styles.ForgotPasswordText} onPress={() => navigation.navigate('EsqueceuSenha')}>Esqueceu sua senha</Text>
+                    <Text style={styles.ForgotPasswordText} onPress={() => navigation.navigate('EsqueceuSenha')}>
+                        Esqueceu sua senha
+                    </Text>
                 </View>
             </View>
-            <TouchableOpacity style={styles.LoginButton}
-               onPress={() => {
-                navigation.navigate('Home');
-              }}>
+            <TouchableOpacity style={styles.LoginButton} onPress={handleLogin}>
                 <Text style={styles.LoginButtonText}>Entrar</Text>
-                  
             </TouchableOpacity>
             <View style={styles.InscrevaseContainer}>
-                <Text style={styles.accountText}>Voce não possui uma conta? </Text>
-                <Text style={styles.InscrevaseText}
-                    onPress={() => navigation.navigate('Inscrevase')}>
+                <Text style={styles.accountText}>Você não possui uma conta? </Text>
+                <Text style={styles.InscrevaseText} onPress={() => navigation.navigate('Inscrevase')}>
                     Inscrever-se
                 </Text>
             </View>
@@ -111,11 +125,10 @@ const LoginScreen = ({ navigation }) => {
                     </View>
                     <Text style={styles.socialLoginButtonText}>Conecte-se com o Google</Text>
                 </View>
-
             </TouchableOpacity>
         </View>
-    )
-}
+    );
+};
 
 const styles = StyleSheet.create({
     container: {
@@ -131,7 +144,6 @@ const styles = StyleSheet.create({
     headerTitle: {
         fontSize: 20,
         lineHeight: 20 * 1.4,
-        width: Display.setWidth(80),
         textAlign: 'center',
     },
     title: {
@@ -165,7 +177,6 @@ const styles = StyleSheet.create({
         fontSize: 18,
         textAlignVertical: 'center',
         padding: 0,
-        height: Display.setHeight(6),
         color: Colors.DEFAULT_BLACK,
         flex: 1,
     },
@@ -192,7 +203,6 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.DEFAULT_RED,
         borderRadius: 8,
         marginHorizontal: 20,
-        height: Display.setHeight(6),
         justifyContent: 'center',
         alignItems: 'center',
         marginTop: 20,
