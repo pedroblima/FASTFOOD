@@ -1,44 +1,45 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, StatusBar, FlatList, } from 'react-native';
-import { Separador } from '../components';
-import { Colors } from '../constants';
+import { StyleSheet, Text, View, StatusBar, FlatList, TouchableOpacity, Image, TextInput } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Feather from 'react-native-vector-icons/Feather';
 import Api from '../services/Api';
-import { Card, Paragraph, Title } from 'react-native-paper';
+import { Colors } from '../constants';
 import { useNavigation } from '@react-navigation/native';
+import Rodape from '../components/Rodape';
 
-
-const lanches = () => {
-
-
+const Lanches = () => {
     const [restaurantes, setRestaurantes] = useState([]);
-    const navigation = useNavigation(); 
+    const [searchTerm, setSearchTerm] = useState('');
+    const navigation = useNavigation();
 
     useEffect(() => {
         Api.get('/delivery')
             .then(response => {
-                // Filtrar os restaurantes pelo tipo "lanches"
-                const restaurantesFiltrados = response.data.filter(restaurante => restaurante.tipo === 'lanches');
+                const restaurantesFiltrados = response.data.filter(restaurante => {
+                    // Filtra com base no nome do restaurante
+                    return restaurante.tipo === 'lanches' && restaurante.nome.toLowerCase().includes(searchTerm.toLowerCase());
+                });
                 setRestaurantes(restaurantesFiltrados);
             })
             .catch(error => {
                 console.log("DEU ERRO NA CHAMADA DE RESTAURANTES: ", error);
             });
-    }, []);
+    }, [searchTerm]); // Adiciona searchTerm como dependência
 
     const renderRestauranteItem = ({ item }) => (
-        <Card
-            style={styles.card}
+        <TouchableOpacity
+            style={styles.restauranteContainer}
             onPress={() => navigation.navigate('StoreDetail', { storeId: item.id })}
         >
-            <Card.Cover source={{ uri: item.imagem }} />
-            <Card.Content>
-                <Title>{item.nome}</Title>
-                <Paragraph>{item.endereco}</Paragraph>
-            </Card.Content>
-        </Card>
+            <View style={styles.restauranteImageContainer}>
+                <Image source={{ uri: item.imagem }} style={styles.restauranteImage} />
+            </View>
+            <View style={styles.restauranteInfo}>
+                <Text style={styles.restauranteName}>{item.nome}</Text>
+                <Text style={styles.restauranteAddress}>{item.endereco}</Text>
+            </View>
+        </TouchableOpacity>
     );
 
     return (
@@ -48,7 +49,6 @@ const lanches = () => {
                 backgroundColor={Colors.DEFAULT_RED}
                 translucent
             />
-            <Separador height={StatusBar.currentHeight} />
             <View style={styles.backgroundCurvedContainer} />
             <View style={styles.headerContainer}>
                 <View style={styles.locationContainer}>
@@ -82,22 +82,31 @@ const lanches = () => {
                         size={25}
                         color={Colors.DEFAULT_GREY}
                     />
-                    <Text style={styles.searchText}>Pesquisar</Text>
+                    <TextInput
+                        style={styles.searchText}
+                        placeholder="Pesquisar"
+                        placeholderTextColor={Colors.DEFAULT_GREY}
+                        onChangeText={(text) => setSearchTerm(text)}
+                        value={searchTerm}
+                    />
                 </View>
                 <Feather
                     name="sliders"
-                    size={20} color={Colors.DEFAULT_RED}
-                    style={{ marginRight: 10 }} />
-            </View >
+                    size={20}
+                    color={Colors.DEFAULT_RED}
+                    style={{ marginRight: 10 }}
+                />
+            </View>
             <View style={styles.RestaurantsContainer}>
                 <FlatList
                     data={restaurantes}
                     keyExtractor={(item) => item.id.toString()}
                     renderItem={renderRestauranteItem}
-                    numColumns={2} // Display 2 columns
-                    columnWrapperStyle={styles.row} // Style for the row
+                    numColumns={2}
+                    columnWrapperStyle={styles.row}
                 />
             </View>
+            <Rodape/>
         </View>
     );
 };
@@ -115,18 +124,17 @@ const styles = StyleSheet.create({
         top: 0,
         left: 0,
         width: '100%',
-        borderBottomLeftRadius: 20, // Raio de curvatura inferior esquerdo
-        borderBottomRightRadius: 20, // Raio de curvatura inferior direito
+        borderBottomLeftRadius: 20,
+        borderBottomRightRadius: 20,
         zIndex: -1,
     },
-
     headerContainer: {
         justifyContent: 'space-evenly',
     },
     locationContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        marginTop: 10,
+        marginTop: 50,
         marginHorizontal: 20,
     },
     locationText: {
@@ -178,39 +186,56 @@ const styles = StyleSheet.create({
         lineHeight: 16 * 1.4,
         marginLeft: 10,
     },
-    CategoriesContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-evenly',
-        marginTop: 20,
+    RestaurantsContainer: {
+        flex: 1,
+        marginHorizontal: 10,
+        marginTop: 64,
     },
     row: {
         flex: 1,
         justifyContent: 'space-between',
-        marginHorizontal: 10, // Adjust as needed
-        marginBottom: 10, // Adjust as needed
+        marginHorizontal: 10,
+        marginBottom: 10,
     },
-    card: {
+    restauranteContainer: {
         flex: 1,
         margin: 8,
         borderRadius: 8,
         overflow: 'hidden',
+        backgroundColor: Colors.DEFAULT_WHITE,
+        elevation: 5, // Adiciona uma sombra para um efeito mais moderno
     },
-    restaurant: {
-        flex: 1,
-        margin: 8,
-        borderRadius: 8,
-        overflow: 'hidden',
-    },
-    restaurantImage: {
-        width: '100%',
+    restauranteImageContainer: {
         height: 150,
+        overflow: 'hidden',
+        borderTopLeftRadius: 8,
+        borderTopRightRadius: 8,
+    },
+    restauranteImage: {
+        width: '100%',
+        height: '100%',
         resizeMode: 'cover',
     },
-    restaurantName: {
+    restauranteInfo: {
+        padding: 10,
+    },
+    restauranteName: {
         fontSize: 16,
         fontWeight: 'bold',
-        marginTop: 8,
+        marginBottom: 8,
+    },
+    restauranteAddress: {
+        color: Colors.DEFAULT_GREY,
+    },
+    bottomTabContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        alignItems: 'center',
+        backgroundColor: Colors.DEFAULT_WHITE,
+        height: 60,
+        borderTopWidth: 1,
+        borderTopColor: Colors.DEFAULT_GREY,
     },
 });
 
-export default lanches;
+export default Lanches;

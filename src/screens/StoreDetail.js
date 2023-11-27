@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, ScrollView } from 'react-native';
+import { StyleSheet, ScrollView, View, Image } from 'react-native'; 
 import { useRoute } from '@react-navigation/native';
 import { Colors } from '../constants';
 import { Card, Paragraph, Title } from 'react-native-paper';
@@ -8,11 +8,22 @@ import Api from '../services/Api';
 
 const StoreDetail = () => {
   const route = useRoute();
-  const storeId = route.params.storeId; // Use the correct key 'storeId' instead of 'id'
+  const storeId = route.params.storeId;
 
   const [lanches, setLanches] = useState([]);
+  const [restaurante, setRestaurante] = useState({});
 
   useEffect(() => {
+    // Obtenha informações do restaurante
+    Api.get(`/restaurante/${storeId}`)
+      .then(response => { 
+        setRestaurante(response.data);
+      })
+      .catch(error => {
+        console.log("DEU ERRO NA CHAMADA DE INFORMAÇÕES DO RESTAURANTE: ", error);
+      });
+
+    // Obtenha lanches relacionados ao restaurante
     Api.get('/lanche')
       .then(response => {
         const lanchesFiltrados = response.data.filter(lanche => lanche.restaurante_id === storeId);
@@ -25,13 +36,16 @@ const StoreDetail = () => {
 
   return (
     <ScrollView>
+      <View style={styles.imagemContainer}>
+        <Image source={{ uri: restaurante.id }} style={styles.restauranteImagem} />
+      </View>
       {lanches.map((item) => (
         <Card key={item.id} style={styles.card}>
-          <Card.Cover source={{ uri: item.imagem }} style={styles.lancheImage} />
-          <Card.Content>
-            <Title style={styles.lancheName}>{item.nome}</Title>
-            <Paragraph style={styles.lanchePrice}>{item.preco}</Paragraph>
-          </Card.Content>
+          <Card.Cover source={{ uri: item.imagem }} style={styles.lancheImagem} />
+          <View style={styles.cardContent}>
+            <Title style={styles.lancheNome}>{item.nome}</Title>
+            <Paragraph style={styles.lanchePreco}>{item.preco}</Paragraph>
+          </View>
         </Card>
       ))}
     </ScrollView>
@@ -39,36 +53,41 @@ const StoreDetail = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: Colors.SECONDARY_WHITE,
-    alignItems: 'center',
-    justifyContent: 'center',
+  imagemContainer: {
+    height: 200,
+    borderBottomLeftRadius: 8,
+    borderBottomRightRadius: 8,
+    overflow: 'hidden',
   },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginVertical: 10,
-  },
-  storeIdText: {
-    fontSize: 16,
-    color: Colors.DEFAULT_GREY,
+  restauranteImagem: {
+    width: '100%',
+    height: '100%',
+    resizeMode: 'cover',
   },
   card: {
     margin: 10,
-    borderRadius: 10,
+    borderRadius: 8,
     elevation: 3,
+    height: 180,
+    justifyContent: 'center',
   },
-  lancheImage: {
-    height: 200,
+  lancheImagem: {
+    height: 100,
+    borderTopLeftRadius: 8,
+    borderTopRightRadius: 8,
   },
-  lancheName: {
-    fontSize: 18,
+  cardContent: {
+    padding: 8,
+  },
+  lancheNome: {
+    fontSize: 14,
     fontWeight: 'bold',
+    marginBottom: 4,
   },
-  lanchePrice: {
-    fontSize: 16,
-  }
+  lanchePreco: {
+    fontSize: 12,
+    color: Colors.DEFAULT_RED,
+  },
 });
 
 export default StoreDetail;
