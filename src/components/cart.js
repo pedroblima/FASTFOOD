@@ -1,64 +1,56 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React, { createContext, useState, useContext, useEffect } from 'react'
+import { StyleSheet, Text, View } from 'react-native';
+import React, { createContext, useState, useContext, useEffect } from 'react';
 
-const CartContext = createContext()
+const CartContext = createContext();
 
 export default function CartProvider(props) {
-    const { children } = props
-    const [Cart, setCart] = useState([])
-    const [totalValor, setTotalValor] = useState([])
+    const { children } = props;
+    const [Cart, setCart] = useState([]);
+    const [totalvalue, setTotalValue] = useState(0);
 
     useEffect(() => {
-        let value = 0
-        Cart.map((item) => {
-            value = value + item.preco
-        })
+        let value = 0;
+        Cart.forEach((item) => {
+            value = value + item.preco;
+        });
 
-        setTotalValor(value)
-    }, [Cart])
+        setTotalValue(value);
+    }, [Cart]);
 
     function add(item) {
-        const newCart = Cart
-        newCart.push(item)
-
-        setCart([...newCart])
+        const newCart = [...Cart, item];
+        setCart(newCart);
     }
 
     function remove(index) {
-        let newCart = Cart
-
-        delete newCart[index]
-
-        setCart([...newCart])
+        let newCart = Cart.filter((item, i) => i !== index);
+        setCart(newCart);
     }
 
     const store = {
         add,
         Cart,
-        totalValor,
-        remove
-    }
+        totalvalue,
+        remove,
+    };
 
     return (
         <CartContext.Provider value={store}>
             {children}
         </CartContext.Provider>
-    )
+    );
 }
 
 export function useCart() {
-    const context = useContext(CartContext)
-    const {
-        Cart,
-        add,
-        totalValor
-    } = context
+    const context = useContext(CartContext);
+    const { Cart, add, totalvalue, remove } = context;
 
     return {
         Cart,
         add,
-        totalValor
-    }
+        totalvalue,
+        remove,
+    };
 }
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({});

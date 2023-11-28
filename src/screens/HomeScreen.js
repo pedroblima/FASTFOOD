@@ -69,14 +69,13 @@ const HomeScreen = () => {
             size={16}
             color={Colors.DEFAULT_WHITE}
           />
-          <TouchableOpacity style={{ position: 'absolute', right: 0 }} onPress={() => navigation.navigate('Carrinho')}>
             <Feather
-              name="shopping-bag"
+              name="bell"
               size={24}
               color={Colors.DEFAULT_WHITE}
               style={{ position: 'absolute', right: 0 }}
             />
-          </TouchableOpacity>
+   
         </View>
         <View style={styles.searchContainer}>
           <View style={styles.searchSection}>

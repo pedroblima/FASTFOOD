@@ -2,10 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, ScrollView, View, Image, ActivityIndicator } from 'react-native';
 import { useRoute } from '@react-navigation/native';
 import { Colors } from '../constants';
-import { Card, Paragraph, Title, Searchbar } from 'react-native-paper';
+import { Card, Paragraph, Title, Searchbar, Avatar, IconButton } from 'react-native-paper';
 
 import Api from '../services/Api';
 import Rodape from '../components/Rodape';
+import { useCart } from '../components/cart';
 
 export default function StoreDetail() {
   const route = useRoute();
@@ -17,8 +18,9 @@ export default function StoreDetail() {
 
   const [filteredRestaurante, setFilteredRestaurante] = useState([]);
 
+  const {add, Cart} = useCart()
+
   useEffect(() => {
-    // Obtenha informações do restaurante
     Api.get('/delivery')
       .then(response => {
         const restauranteFiltrado = response.data.find(restaurante => restaurante.id === storeId);
@@ -61,16 +63,18 @@ export default function StoreDetail() {
         {filteredRestaurante.map((item) => (
           <Card key={item.id} style={styles.card}>
             <Card.Cover source={{ uri: item.imagem }} style={styles.restauranteImagem} />
-            <View style={styles.cardContent}>
-              <Title style={styles.lancheNome}>{item.nome}</Title>
-              {/* Adicionei o horário de funcionamento aqui */}
-              <Paragraph style={styles.lanchePreco}>{item.horario_funcionamento}</Paragraph>
-            </View>
+            <Card.Title 
+            title={item.nome}
+            subtitle={item.descricao} 
+            left={() => <Avatar.Image size={70} source={{ uri: item.imagem}} style={{marginTop: 25}}/>}
+            titleStyle={{ fontSize: 24, margin: 30 }}
+            subtitleStyle={{flex: 1, margin: 30}}
+            style={styles.cardContent} />           
           </Card>
         ))}
       </View>
 
-      {/* Adicionei um espaçamento entre a imagem e a barra de pesquisa */}
+     
       <Searchbar
         placeholder="Pesquisar lanches"
         onChangeText={handleSearch}
@@ -80,10 +84,13 @@ export default function StoreDetail() {
       {filteredLanches.map((item) => (
         <Card key={item.id} style={styles.card}>
           <Card.Cover source={{ uri: item.imagem }} style={styles.lancheImagem} />
-          <View style={styles.cardContent}>
-            <Title style={styles.lancheNome}>{item.nome}</Title>
-            <Paragraph style={styles.lanchePreco}>{item.preco}</Paragraph>
-          </View>
+          <Card.Title
+          title={item.nome}
+          subtitle={item.preco}
+          titleStyle={styles.lancheNome}
+          subtitleStyle={styles.lanchePreco} 
+          right={() => <IconButton icon="cart" size={25} onPress={() => add(item)}/>}
+          style={styles.cardContent}/>
         </Card>
       ))}
 
@@ -152,5 +159,5 @@ const styles = StyleSheet.create({
     height: '100%',
     resizeMode: 'center',
   },
- 
+
 });

@@ -65,7 +65,7 @@ const Lanches = () => {
                         color={Colors.DEFAULT_WHITE}
                     />
                     <Feather
-                        name="shopping-bag"
+                        name="bell"
                         size={24}
                         color={Colors.DEFAULT_WHITE}
                         style={{ position: 'absolute', right: 0 }}
