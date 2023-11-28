@@ -3,21 +3,39 @@ import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Feather from 'react-native-vector-icons/Feather';
+import { useNavigation } from '@react-navigation/native';
 
 const Rodape = () => {
+  const navigation = useNavigation();
+
+  const goToLoginScreen = () => {
+    // Substitua 'Login' pelo nome real do componente de tela de login
+    navigation.navigate('Login');
+  };
+
+  const goToInicioScreen = () => {
+    // Substitua 'Inicio' pelo nome real do componente de tela de início
+    navigation.navigate('Home');
+  };
+
+  const goToCarrinhoScreen = () => {
+    // Substitua 'Carrinho' pelo nome real do componente de tela do carrinho
+    navigation.navigate('Carrinho');
+  };
+
   return (
     <View style={styles.rodapeContainer}>
-      <TouchableOpacity style={styles.rodapeItem}>
+      <TouchableOpacity style={styles.rodapeItem} onPress={goToInicioScreen}>
         <Ionicons name="home-outline" size={24} color="#FFFFFF" />
         <Text style={styles.rodapeItemText}>Início</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.rodapeItem}>
+      <TouchableOpacity style={styles.rodapeItem} onPress={goToLoginScreen}>
         <MaterialIcons name="exit-to-app" size={24} color="#FFFFFF" />
         <Text style={styles.rodapeItemText}>Sair</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.rodapeItem}>
-        <Feather name="settings" size={24} color="#FFFFFF" />
-        <Text style={styles.rodapeItemText}>Configurações</Text>
+      <TouchableOpacity style={styles.rodapeItem} onPress={goToCarrinhoScreen}>
+        <Feather name="shopping-cart" size={24} color="#FFFFFF" />
+        <Text style={styles.rodapeItemText}>Carrinho</Text>
       </TouchableOpacity>
     </View>
   );

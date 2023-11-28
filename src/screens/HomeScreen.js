@@ -14,7 +14,7 @@ const HomeScreen = () => {
   const [activeCategory, setActiveCategory] = useState();
   const [searchText, setSearchText] = useState();
   const navigation = useNavigation();
-  
+
   const carouselData = [
     {
       image: 'https://www.circuitodenoticias.com.br/antigo/up/img/1519938605.jpg',
@@ -40,7 +40,7 @@ const HomeScreen = () => {
       </View>
     </TouchableOpacity>
   );
-  
+
   const handleSearch = () => {
     console.log('Pesquisar por:', searchText);
     setSearchText('');
@@ -69,15 +69,14 @@ const HomeScreen = () => {
             size={16}
             color={Colors.DEFAULT_WHITE}
           />
-          <Feather
-            name="bell"
-            size={24}
-            color={Colors.DEFAULT_WHITE}
-            style={{ position: 'absolute', right: 0 }}
-          />
-          <View style={styles.alertBadge}>
-            <Text style={styles.alertBadgeText}>12</Text>
-          </View>
+          <TouchableOpacity style={{ position: 'absolute', right: 0 }} onPress={() => navigation.navigate('Carrinho')}>
+            <Feather
+              name="shopping-bag"
+              size={24}
+              color={Colors.DEFAULT_WHITE}
+              style={{ position: 'absolute', right: 0 }}
+            />
+          </TouchableOpacity>
         </View>
         <View style={styles.searchContainer}>
           <View style={styles.searchSection}>
@@ -94,13 +93,7 @@ const HomeScreen = () => {
               onChangeText={(text) => setSearchText(text)}
             />
           </View>
-          <TouchableOpacity style={styles.searchButton} onPress={handleSearch}>
-            <Feather
-              name="search"
-              size={20}
-              color={Colors.DEFAULT_RED}
-            />
-          </TouchableOpacity>
+          <TouchableOpacity style={styles.searchButton} onPress={handleSearch} />
         </View>
         <View style={styles.CategoriesContainer}>
           {Mock.CATEGORIES.map(({ name, logo }) => (
@@ -114,8 +107,8 @@ const HomeScreen = () => {
           ))}
         </View>
       </View>
-    
-      
+
+
       <Carousel
         data={carouselData}
         renderItem={renderCarouselItem}
@@ -124,9 +117,9 @@ const HomeScreen = () => {
         enableSnap={true}
         loop={true}
       />
-      
 
-    
+
+
       <Rodape />
     </View>
   );

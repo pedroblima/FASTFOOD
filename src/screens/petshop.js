@@ -65,13 +65,13 @@ const Lanches = () => {
                         color={Colors.DEFAULT_WHITE}
                     />
                     <Feather
-                        name="bell"
+                        name="shopping-bag"
                         size={24}
                         color={Colors.DEFAULT_WHITE}
                         style={{ position: 'absolute', right: 0 }}
                     />
                     <View style={styles.alertBadge}>
-                        <Text style={styles.alertBadgeText}>32</Text>
+                        <Text style={styles.alertBadgeText}>3</Text>
                     </View>
                 </View>
             </View>
