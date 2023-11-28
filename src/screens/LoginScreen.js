@@ -6,6 +6,9 @@ import Feather from "react-native-vector-icons/Feather";
 import { Colors, Images } from '../constants';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ToggleButton } from '../components';
+import * as Yup from 'yup';
+import { Formik } from 'formik';
+import { Display } from '../utils';
 
 const LoginScreen = ({ navigation }) => {
     const [isPasswordShow, setIsPasswordShow] = useState(false);
@@ -20,113 +23,118 @@ const LoginScreen = ({ navigation }) => {
 
     const handleLogin = async () => {
         try {
-            // Retrieve user data from AsyncStorage
             const storedUserData = await AsyncStorage.getItem('userData');
             if (storedUserData) {
                 const userData = JSON.parse(storedUserData);
-
-                // Check if the entered username and password match the stored user data
                 if (userData.username === username && userData.password === password) {
-                    // If match, navigate to the home screen
                     navigation.navigate('Home');
                 } else {
-                    // If not match, navigate to the registration screen
                     navigation.navigate('Inscrevase');
                 }
-            } else {
-                // If no user data found, navigate to the registration screen
-                navigation.navigate('Inscrevase');
             }
         } catch (error) {
             console.log('Error retrieving user data:', error);
         }
     };
 
+    const validationSchema = Yup.object().shape({
+        username: Yup.string().required('Campo obrigatório'),
+        password: Yup.string().required('Campo obrigatório'),
+    });
+
     return (
-        <View style={styles.container}>
-            <StatusBar barStyle="dark-content" backgroundColor={Colors.DEFAULT_RED} translucent />
-            <Separador height={StatusBar.currentHeight} />
-            <View style={styles.headerContainer}>
-                <Ionicons name="chevron-back-outline" size={30} onPress={() => navigation.goBack()} />
-                <Text style={styles.headerTitle}>Entrar</Text>
-            </View>
-            <Text style={styles.title}>Bem Vindo</Text>
-            <Text style={styles.content}>Digite seu nome de usuário e senha e aproveite para pedir sua comida</Text>
-            <View style={styles.inputContainer}>
-                <View style={styles.inputSubContainer}>
-                    <Feather name="user" size={22} color={Colors.DEFAULT_GREY} style={{ marginRight: 10 }} />
-                    <TextInput
-                        placeholder="Nome de usuário"
-                        placeholderTextColor={Colors.DEFAULT_GREY}
-                        selectionColor={Colors.DEFAULT_GREY}
-                        style={styles.inputText}
-                        value={username}
-                        onChangeText={(text) => setUsername(text)}
-                    />
-                    <View />
-                </View>
-            </View>
-            <Separador height={15} />
-            <View style={styles.inputContainer}>
-                <View style={styles.inputSubContainer}>
-                    <Feather name="lock" size={22} color={Colors.DEFAULT_GREY} style={{ marginRight: 10 }} />
-                    <TextInput
-                        secureTextEntry={isPasswordShow ? false : true}
-                        placeholder="Senha"
-                        placeholderTextColor={Colors.DEFAULT_GREY}
-                        selectionColor={Colors.DEFAULT_GREY}
-                        style={styles.inputText}
-                        value={password}
-                        onChangeText={(text) => setPassword(text)}
-                    />
-                    <Feather
-                        name={isPasswordShow ? "eye" : "eye-off"}
-                        size={22}
-                        color={Colors.DEFAULT_GREY}
-                        style={{ marginRight: 10 }}
-                        onPress={() => setIsPasswordShow(!isPasswordShow)}
-                    />
-                </View>
-            </View>
-            <Text></Text>
-            <View style={styles.ForgotPasswordContainer}>
-                <View style={styles.ToggleContainer}>
-                    <ToggleButton size={0.5} />
-                    <Text style={styles.rememberMeText}>Lembrar</Text>
-                </View>
-                <View>
-                    <Text style={styles.ForgotPasswordText} onPress={() => navigation.navigate('EsqueceuSenha')}>
-                        Esqueceu sua senha
-                    </Text>
-                </View>
-            </View>
-            <TouchableOpacity style={styles.LoginButton} onPress={handleLogin}>
-                <Text style={styles.LoginButtonText}>Entrar</Text>
-            </TouchableOpacity>
-            <View style={styles.InscrevaseContainer}>
-                <Text style={styles.accountText}>Você não possui uma conta? </Text>
-                <Text style={styles.InscrevaseText} onPress={() => navigation.navigate('Inscrevase')}>
-                    Inscrever-se
-                </Text>
-            </View>
-            <Text style={styles.orText}>OU</Text>
-            <TouchableOpacity style={styles.facebookButton}>
-                <View style={styles.socialButtonsContainer}>
-                    <View style={styles.LoginButtonLogoContainer}>
-                        <Image source={Images.FACEBOOK} style={styles.LoginButtonLogo} />
+        <Formik
+            initialValues={{ username: '', password: '' }}
+            validationSchema={validationSchema}
+            onSubmit={handleLogin}
+        >
+            {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
+                <View style={styles.container}>
+                    <StatusBar barStyle="dark-content" backgroundColor={Colors.DEFAULT_RED} translucent />
+                    <Separador height={StatusBar.currentHeight} />
+                    <View style={styles.headerContainer}>
+                        <Ionicons name="chevron-back-outline" size={30} onPress={() => navigation.goBack()} />
+                        <Text style={styles.headerTitle}>Entrar</Text>
                     </View>
-                    <Text style={styles.socialLoginButtonText}>Conecte-se com Facebook</Text>
-                </View>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.googleButton}>
-                <View style={styles.socialButtonsContainer}>
-                    <View style={styles.LoginButtonLogoContainer}>
-                        <Image source={Images.GOOGLE} style={styles.LoginButtonLogo} />
+                    <Text style={styles.title}>Bem Vindo</Text>
+                    <Text style={styles.content}>Digite seu nome de usuário e senha e aproveite para pedir sua comida</Text>
+                    <View style={styles.inputContainer}>
+                        <View style={styles.inputSubContainer}>
+                            <Feather name="user" size={22} color={Colors.DEFAULT_GREY} style={{ marginRight: 10 }} />
+                            <TextInput
+                                placeholder="Nome de usuário"
+                                placeholderTextColor={Colors.DEFAULT_GREY}
+                                selectionColor={Colors.DEFAULT_GREY}
+                                style={styles.inputText}
+                                value={values.username}
+                                onChangeText={handleChange('username')}
+                                onBlur={handleBlur('username')}
+                            />
+                        </View>
+                        {touched.username && errors.username && (
+                            <Text style={styles.errorText}>{errors.username}</Text>
+                        )}
                     </View>
-                    <Text style={styles.socialLoginButtonText}>Conecte-se com o Google</Text>
+                    <Separador height={15} />
+                    <View style={styles.inputContainer}>
+                        <View style={styles.inputSubContainer}>
+                            <Feather name="lock" size={22} color={Colors.DEFAULT_GREY} style={{ marginRight: 10 }} />
+                            <TextInput
+                                secureTextEntry={isPasswordShow ? false : true}
+                                placeholder="Senha"
+                                placeholderTextColor={Colors.DEFAULT_GREY}
+                                selectionColor={Colors.DEFAULT_GREY}
+                                style={styles.inputText}
+                                value={values.password}
+                                onChangeText={handleChange('password')}
+                                onBlur={handleBlur('password')}
+                            />
+                        </View>
+                        {touched.password && errors.password && (
+                            <Text style={styles.errorText}>{errors.password}</Text>
+                        )}
+                    </View>
+                    <Text></Text>
+                    <View style={styles.ForgotPasswordContainer}>
+                        <View style={styles.ToggleContainer}>
+                            <ToggleButton size={0.5} />
+                            <Text style={styles.rememberMeText}>Lembrar</Text>
+                        </View>
+                        <View>
+                            <Text style={styles.ForgotPasswordText} onPress={() => navigation.navigate('EsqueceuSenha')}>
+                                Esqueceu sua senha
+                            </Text>
+                        </View>
+                    </View>
+                    <TouchableOpacity style={styles.LoginButton} onPress={handleSubmit}>
+                        <Text style={styles.LoginButtonText}>Entrar</Text>
+                    </TouchableOpacity>
+                    <View style={styles.InscrevaseContainer}>
+                        <Text style={styles.accountText}>Você não possui uma conta? </Text>
+                        <Text style={styles.InscrevaseText} onPress={() => navigation.navigate('Inscrevase')}>
+                            Inscrever-se
+                        </Text>
+                    </View>
+                    <Text style={styles.orText}>OU</Text>
+                    <TouchableOpacity style={styles.facebookButton}>
+                        <View style={styles.socialButtonsContainer}>
+                            <View style={styles.LoginButtonLogoContainer}>
+                                <Image source={Images.FACEBOOK} style={styles.LoginButtonLogo} />
+                            </View>
+                            <Text style={styles.socialLoginButtonText}>Conecte-se com Facebook</Text>
+                        </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.googleButton}>
+                        <View style={styles.socialButtonsContainer}>
+                            <View style={styles.LoginButtonLogoContainer}>
+                                <Image source={Images.GOOGLE} style={styles.LoginButtonLogo} />
+                            </View>
+                            <Text style={styles.socialLoginButtonText}>Conecte-se com o Google</Text>
+                        </View>
+                    </TouchableOpacity>
                 </View>
-            </TouchableOpacity>
-        </View>
+            )}
+        </Formik>
     );
 };
 
@@ -144,6 +152,7 @@ const styles = StyleSheet.create({
     headerTitle: {
         fontSize: 20,
         lineHeight: 20 * 1.4,
+        width: Display.setWidth(80),
         textAlign: 'center',
     },
     title: {
@@ -177,6 +186,7 @@ const styles = StyleSheet.create({
         fontSize: 18,
         textAlignVertical: 'center',
         padding: 0,
+        height: Display.setHeight(6),
         color: Colors.DEFAULT_BLACK,
         flex: 1,
     },
@@ -203,6 +213,7 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.DEFAULT_RED,
         borderRadius: 8,
         marginHorizontal: 20,
+        height: Display.setHeight(6),
         justifyContent: 'center',
         alignItems: 'center',
         marginTop: 20,
@@ -280,6 +291,11 @@ const styles = StyleSheet.create({
     ToggleContainer: {
         flexDirection: 'row',
         alignItems: 'center',
+    },
+    errorText: {
+        fontSize: 12,
+        color: Colors.DEFAULT_RED,
+        marginTop: 5,
     },
 });
 

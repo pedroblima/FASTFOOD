@@ -139,6 +139,7 @@ const styles = StyleSheet.create({
   },
   searchBar: {
     margin: 10,
+    marginVertical: 10,
   },
   imagemContainer: {
     height: 300, // Aumentei a altura da imagem do restaurante
@@ -149,9 +150,7 @@ const styles = StyleSheet.create({
   restauranteImagem: {
     width: '100%',
     height: '100%',
-    resizeMode: 'cover',
+    resizeMode: 'center',
   },
-  searchBar: {
-    marginVertical: 10, // Adicionei um espaçamento vertical
-  },
+ 
 });

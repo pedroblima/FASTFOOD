@@ -19,7 +19,7 @@ import PetShop from "../screens/petshop";
 import StoreDetail from "../screens/StoreDetail";
 
 import CartProvider from "../components/cart";
-import carrinho from "../screens/Carrinho";
+import Carrinho from "../screens/Carrinho";
 
 
 const Stack = createNativeStackNavigator()
@@ -42,7 +42,7 @@ const Navigators = () => {
                     <Stack.Screen name="lanches" component={lanches} />
                     <Stack.Screen name="petshop" component={PetShop} />
                     <Stack.Screen name="StoreDetail" component={StoreDetail} />
-                    <Stack.Screen name="Carrinho" component={carrinho} />
+                    <Stack.Screen name="Carrinho" component={Carrinho} />
                 </Stack.Navigator>
             </NavigationContainer>
         </CartProvider>

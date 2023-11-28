@@ -5,6 +5,8 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import Separador from '../components/Separador';
 import Feather from 'react-native-vector-icons/Feather';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Display } from '../utils';
+import * as Yup from 'yup';
 
 const InscrevaseScreen = ({ navigation }) => {
     const [isPasswordShow, setIsPasswordShow] = useState(false);
@@ -14,6 +16,16 @@ const InscrevaseScreen = ({ navigation }) => {
 
     const handleSignUp = async () => {
         try {
+            // Validation schema
+            const schema = Yup.object().shape({
+                username: Yup.string().required('Nome de usuário é obrigatório'),
+                email: Yup.string().email('E-mail inválido').required('E-mail é obrigatório'),
+                password: Yup.string().min(6, 'Senha deve ter no mínimo 6 caracteres').required('Senha é obrigatória'),
+            });
+
+            // Validate the form data
+            await schema.validate({ username, email, password }, { abortEarly: false });
+
             // Store user data in AsyncStorage
             const userData = { username, email, password };
             await AsyncStorage.setItem('userData', JSON.stringify(userData));
@@ -24,25 +36,27 @@ const InscrevaseScreen = ({ navigation }) => {
             // Navigate to the next screen
             navigation.navigate('RegistraTelefone');
         } catch (error) {
-            console.log('Error storing user data:', error);
+            // Handle validation errors
+            if (error instanceof Yup.ValidationError) {
+                const validationErrors = {};
+                error.inner.forEach((e) => {
+                    validationErrors[e.path] = e.message;
+                });
+                // Handle validation errors as needed (display errors, etc.)
+                console.log('Validation Errors:', validationErrors);
+            } else {
+                // Handle other errors (e.g., AsyncStorage error)
+                console.log('Error storing user data:', error);
+            }
         }
     };
 
-
     return (
         <View style={styles.container}>
-            <StatusBar barStyle="dark-content"
-                backgroundColor={Colors.DEFAULT_RED}
-                translucent />
-
+            <StatusBar barStyle="dark-content" backgroundColor={Colors.DEFAULT_RED} translucent />
             <Separador height={StatusBar.currentHeight} />
             <View style={styles.headerContainer}>
-                <Ionicons
-                    name="chevron-back-outline"
-                    size={30}
-                    onPress={() => navigation.goBack()}
-                />
-
+                <Ionicons name="chevron-back-outline" size={30} onPress={() => navigation.goBack()} />
                 <Text style={styles.headerTitle}>Inscrever-se</Text>
             </View>
             <Text style={styles.title}>Crie sua Conta</Text>
@@ -51,11 +65,7 @@ const InscrevaseScreen = ({ navigation }) => {
             </Text>
             <View style={styles.inputContainer}>
                 <View style={styles.inputSubContainer}>
-                    <Feather name="user"
-                        size={22}
-                        color={Colors.DEFAULT_GREY}
-                        style={{ marginRight: 10 }}
-                    />
+                    <Feather name="user" size={22} color={Colors.DEFAULT_GREY} style={{ marginRight: 10 }} />
                     <TextInput
                         placeholder="Nome de usuário"
                         placeholderTextColor={Colors.DEFAULT_GREY}
@@ -70,11 +80,7 @@ const InscrevaseScreen = ({ navigation }) => {
             <Separador height={15} />
             <View style={styles.inputContainer}>
                 <View style={styles.inputSubContainer}>
-                    <Feather name="mail"
-                        size={22}
-                        color={Colors.DEFAULT_GREY}
-                        style={{ marginRight: 10 }}
-                    />
+                    <Feather name="mail" size={22} color={Colors.DEFAULT_GREY} style={{ marginRight: 10 }} />
                     <TextInput
                         placeholder="E-mail"
                         placeholderTextColor={Colors.DEFAULT_GREY}
@@ -116,7 +122,6 @@ const InscrevaseScreen = ({ navigation }) => {
             <TouchableOpacity style={styles.LoginButton} onPress={handleSignUp}>
                 <Text style={styles.LoginButtonText}>Criar Conta</Text>
             </TouchableOpacity>
-
             <Text style={styles.orText}>OU</Text>
             <TouchableOpacity style={styles.facebookButton}>
                 <View style={styles.socialButtonsContainer}>
@@ -133,20 +138,15 @@ const InscrevaseScreen = ({ navigation }) => {
                     </View>
                     <Text style={styles.socialLoginButtonText}>Conecte-se com o Google</Text>
                 </View>
-
             </TouchableOpacity>
-
         </View>
-
-
     );
 };
-
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: Colors.DEFAULT_WHITE,
+        backgroundColor: Colors.DEFAULT_WHITE
     },
     headerContainer: {
         flexDirection: "row",
@@ -157,6 +157,7 @@ const styles = StyleSheet.create({
     headerTitle: {
         fontSize: 20,
         lineHeight: 20 * 1.4,
+        width: Display.setWidth(80),
         textAlign: 'center',
     },
     title: {
@@ -190,13 +191,34 @@ const styles = StyleSheet.create({
         fontSize: 18,
         textAlignVertical: 'center',
         padding: 0,
+        height: Display.setHeight(6),
         color: Colors.DEFAULT_BLACK,
         flex: 1,
+    },
+    ForgotPasswordContainer: {
+        marginHorizontal: 20,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+
+    },
+    rememberMeText: {
+        marginTop: 1,
+        marginLeft: 10,
+        fontSize: 14,
+        lineHeight: 12 * 1.4,
+        color: Colors.DEFAULT_GREY,
+    },
+    ForgotPasswordText: {
+        fontSize: 12,
+        lineHeight: 12 * 1.4,
+        color: Colors.DEFAULT_RED,
     },
     LoginButton: {
         backgroundColor: Colors.DEFAULT_RED,
         borderRadius: 8,
         marginHorizontal: 20,
+        height: Display.setHeight(6),
         justifyContent: 'center',
         alignItems: 'center',
         marginTop: 20,
@@ -206,13 +228,30 @@ const styles = StyleSheet.create({
         lineHeight: 18 * 1.4,
         color: Colors.DEFAULT_WHITE,
     },
+    InscrevaseContainer: {
+        marginHorizontal: 20,
+        justifyContent: 'center',
+        paddingVertical: 20,
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    accountText: {
+        fontSize: 13,
+        lineHeight: 13 * 1.4,
+        color: Colors.DEFAULT_BLACK,
+    },
+    InscrevaseText: {
+        fontSize: 13,
+        lineHeight: 13 * 1.4,
+        color: Colors.DEFAULT_RED,
+        marginLeft: 2,
+    },
     orText: {
         fontSize: 13,
         lineHeight: 15 * 1.4,
         color: Colors.DEFAULT_BLACK,
         marginLeft: 2,
         alignSelf: 'center',
-        marginTop: 20,
     },
     facebookButton: {
         backgroundColor: Colors.FABEBOOK_BLUE,
@@ -253,6 +292,15 @@ const styles = StyleSheet.create({
         color: Colors.DEFAULT_WHITE,
         fontSize: 13,
         lineHeight: 13 * 1.4,
+    },
+    ToggleContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    errorText: {
+        fontSize: 12,
+        color: Colors.DEFAULT_RED,
+        marginTop: 5,
     },
 });
 
